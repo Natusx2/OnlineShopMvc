@@ -1,0 +1,40 @@
+@model Product
+
+<a class="product-card @(Model.Amount == 0 ? "is-out" : "")" asp-controller="Home" asp-action="Details" asp-route-id="@Model.Id">
+    @if (Model.Rating >= 4.7)
+    {
+        <span class="product-ribbon">Top</span>
+    }
+    <div class="product-image">
+        @if (string.IsNullOrWhiteSpace(Model.ImageName))
+        {
+            <div class="product-placeholder">@Model.Name[..1]</div>
+        }
+        else
+        {
+            <img src="~/images/products/@Model.ImageName" alt="@Model.Name" />
+        }
+    </div>
+    <div class="product-body">
+        <div class="product-meta">
+            <span class="category-pill">@Model.Category</span>
+            <partial name="_Rating" model="Model.Rating" />
+        </div>
+        <h3>@Model.Name</h3>
+        <p>@Model.Description</p>
+        <div class="product-footer">
+            @if (Model.Amount == 0)
+            {
+                <span class="out-label">Немає в наявності</span>
+            }
+            else
+            {
+                <span>
+                    <span class="price">@Model.Price.ToString("N0") грн</span>
+                    <span class="amount">В наявності: @Model.Amount шт.</span>
+                </span>
+                <span class="details-chip">Деталі</span>
+            }
+        </div>
+    </div>
+</a>

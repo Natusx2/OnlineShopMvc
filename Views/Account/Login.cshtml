@@ -1,0 +1,22 @@
+@{
+    ViewData["Title"] = "Вхід адміністратора";
+}
+
+<section class="auth-panel">
+    <h1>Вхід адміністратора</h1>
+    <p>Для керування товарами увійдіть як адміністратор.</p>
+
+    <form asp-controller="Account" asp-action="Login" method="post">
+        <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+        <div class="mb-3">
+            <label class="form-label" for="login">Логін</label>
+            <input class="form-control" id="login" name="login" value="admin" />
+        </div>
+        <div class="mb-4">
+            <label class="form-label" for="password">Пароль</label>
+            <input class="form-control" id="password" name="password" type="password" value="admin123" />
+        </div>
+        <button class="btn btn-success w-100" type="submit">Увійти</button>
+    </form>
+</section>

@@ -1,0 +1,59 @@
+@model ProductListViewModel
+@{
+    ViewData["Title"] = "Головна";
+}
+
+<section class="shop-hero">
+    <div class="shop-hero-content">
+        <p class="shop-eyebrow">Онлайн-магазин техніки</p>
+        <h1>TechRoom</h1>
+        <p>Обирайте товари для навчання, роботи та ігор. Натисніть на картку, щоб перейти до детальної інформації.</p>
+        <div class="hero-actions">
+            <a class="btn btn-light btn-lg" href="#catalog">Дивитися каталог</a>
+            <span>Швидка доставка по Україні</span>
+        </div>
+    </div>
+    <div class="hero-showcase" aria-hidden="true">
+        <div class="showcase-card main">Laptop</div>
+        <div class="showcase-card small top">Audio</div>
+        <div class="showcase-card small bottom">Mobile</div>
+    </div>
+</section>
+
+<section class="store-benefits">
+    <div>
+        <strong>Гарантія</strong>
+        <span>Офіційні товари</span>
+    </div>
+    <div>
+        <strong>Оплата</strong>
+        <span>Онлайн або при отриманні</span>
+    </div>
+    <div>
+        <strong>Підтримка</strong>
+        <span>Допоможемо з вибором</span>
+    </div>
+</section>
+
+<section class="shop-toolbar" id="catalog">
+    <div>
+        <h2>Каталог товарів</h2>
+        <span>@Model.Products.Count товарів у каталозі</span>
+    </div>
+    <form asp-controller="Home" asp-action="Index" method="get" class="sort-form">
+        <label for="sort">Сортування</label>
+        <select id="sort" name="sort" class="form-select" onchange="this.form.submit()">
+            <option value="@ProductSortOptions.PriceAsc" selected="@(Model.Sort == ProductSortOptions.PriceAsc)">Ціна: від дешевих</option>
+            <option value="@ProductSortOptions.PriceDesc" selected="@(Model.Sort == ProductSortOptions.PriceDesc)">Ціна: від дорогих</option>
+            <option value="@ProductSortOptions.Name" selected="@(Model.Sort == ProductSortOptions.Name)">Назва</option>
+            <option value="@ProductSortOptions.RatingDesc" selected="@(Model.Sort == ProductSortOptions.RatingDesc)">Рейтинг</option>
+        </select>
+    </form>
+</section>
+
+<section class="product-grid">
+    @foreach (var product in Model.Products)
+    {
+        <partial name="_ProductCard" model="product" />
+    }
+</section>

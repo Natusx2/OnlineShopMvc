@@ -1,0 +1,52 @@
+@model Product
+@{
+    ViewData["Title"] = Model.Name;
+}
+
+<section class="details-layout">
+    <div class="details-image">
+        @if (string.IsNullOrWhiteSpace(Model.ImageName))
+        {
+            <div class="product-placeholder large">@Model.Name[..1]</div>
+        }
+        else
+        {
+            <img src="~/images/products/@Model.ImageName" alt="@Model.Name" />
+        }
+    </div>
+
+    <div class="details-info">
+        <span class="category-pill">@Model.Category</span>
+        <h1>@Model.Name</h1>
+        <partial name="_Rating" model="Model.Rating" />
+        <p>@Model.Description</p>
+
+        <div class="details-specs">
+            <div>
+                <span>Категорія</span>
+                <strong>@Model.Category</strong>
+            </div>
+            <div>
+                <span>Рейтинг</span>
+                <strong>@Model.Rating.ToString("0.0") / 5</strong>
+            </div>
+            <div>
+                <span>Наявність</span>
+                <strong>@(Model.Amount == 0 ? "Немає" : $"{Model.Amount} шт.")</strong>
+            </div>
+        </div>
+
+        @if (Model.Amount == 0)
+        {
+            <div class="stock-alert">Немає в наявності</div>
+        }
+        else
+        {
+            <div class="details-price">@Model.Price.ToString("N0") грн</div>
+            <div class="stock-ok">В наявності: @Model.Amount шт.</div>
+            <button class="btn btn-success btn-lg mt-3" type="button">Додати в кошик</button>
+        }
+
+        <a class="btn btn-outline-dark mt-4" asp-controller="Home" asp-action="Index">Назад до каталогу</a>
+    </div>
+</section>
