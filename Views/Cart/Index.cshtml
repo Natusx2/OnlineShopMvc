@@ -1,0 +1,87 @@
+@model CartViewModel
+@{
+    ViewData["Title"] = "Кошик";
+}
+
+<section class="cart-heading">
+    <div>
+        <p>Ваше замовлення</p>
+        <h1>Кошик</h1>
+    </div>
+    <a class="btn btn-outline-dark" asp-controller="Home" asp-action="Index">Продовжити покупки</a>
+</section>
+
+@if (!Model.Lines.Any())
+{
+    <section class="empty-cart">
+        <h2>Кошик порожній</h2>
+        <p>Додайте товар із каталогу, і він з'явиться тут.</p>
+        <a class="btn btn-success" asp-controller="Home" asp-action="Index">Перейти до товарів</a>
+    </section>
+}
+else
+{
+    <section class="cart-layout">
+        <div class="cart-list">
+            @foreach (var line in Model.Lines)
+            {
+                <article class="cart-row">
+                    <div class="cart-product">
+                        <div class="cart-image">
+                            @if (string.IsNullOrWhiteSpace(line.Product.ImageName))
+                            {
+                                <span class="mini-placeholder">@line.Product.Name[..1]</span>
+                            }
+                            else
+                            {
+                                <img src="~/images/products/@line.Product.ImageName" alt="@line.Product.Name" />
+                            }
+                        </div>
+                        <div>
+                            <span class="category-pill">@line.Product.Category</span>
+                            <h2>@line.Product.Name</h2>
+                            <p>@line.Product.Price.ToString("N0") грн за одиницю</p>
+                        </div>
+                    </div>
+
+                    <div class="cart-controls">
+                        <form asp-controller="Cart" asp-action="Decrease" method="post">
+                            <input type="hidden" name="productId" value="@line.Product.Id" />
+                            <button class="qty-btn" type="submit">-</button>
+                        </form>
+
+                        <span class="qty-value">@line.Quantity</span>
+
+                        <form asp-controller="Cart" asp-action="Increase" method="post">
+                            <input type="hidden" name="productId" value="@line.Product.Id" />
+                            <button class="qty-btn" type="submit" disabled="@(line.Quantity >= line.Product.Amount)">+</button>
+                        </form>
+                    </div>
+
+                    <div class="cart-line-total">
+                        <span>Сума товару</span>
+                        <strong>@line.LineTotal.ToString("N0") грн</strong>
+                    </div>
+
+                    <form asp-controller="Cart" asp-action="Remove" method="post">
+                        <input type="hidden" name="productId" value="@line.Product.Id" />
+                        <button class="btn btn-outline-danger btn-sm" type="submit">Видалити</button>
+                    </form>
+                </article>
+            }
+        </div>
+
+        <aside class="cart-summary">
+            <h2>Разом</h2>
+            <div>
+                <span>Кількість товарів</span>
+                <strong>@Model.TotalQuantity</strong>
+            </div>
+            <div>
+                <span>Загальна сума</span>
+                <strong>@Model.Total.ToString("N0") грн</strong>
+            </div>
+            <button class="btn btn-success w-100 btn-lg" type="button">Оформити замовлення</button>
+        </aside>
+    </section>
+}

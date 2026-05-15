@@ -44,7 +44,11 @@
         {
             <div class="details-price">@Model.Price.ToString("N0") грн</div>
             <div class="stock-ok">В наявності: @Model.Amount шт.</div>
-            <button class="btn btn-success btn-lg mt-3" type="button">Додати в кошик</button>
+            <form asp-controller="Cart" asp-action="Add" method="post" class="mt-3">
+                <input type="hidden" name="productId" value="@Model.Id" />
+                <input type="hidden" name="returnUrl" value="@Context.Request.Path" />
+                <button class="btn btn-success btn-lg" type="submit">Додати в кошик</button>
+            </form>
         }
 
         <a class="btn btn-outline-dark mt-4" asp-controller="Home" asp-action="Index">Назад до каталогу</a>

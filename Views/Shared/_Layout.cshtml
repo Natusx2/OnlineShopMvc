@@ -1,3 +1,9 @@
+@inject IHttpContextAccessor HttpContextAccessor
+@{
+    var cartCount = HttpContextAccessor.HttpContext == null
+        ? 0
+        : CartSessionService.GetCount(HttpContextAccessor.HttpContext.Session);
+}
 <!DOCTYPE html>
 <html lang="uk">
 <head>
@@ -33,6 +39,10 @@
                         }
                     </ul>
                     <div class="d-flex align-items-center gap-2">
+                        <a class="cart-link" asp-controller="Cart" asp-action="Index">
+                            Кошик
+                            <span>@cartCount</span>
+                        </a>
                         @if (User.Identity?.IsAuthenticated == true)
                         {
                             <span class="admin-badge">admin</span>
